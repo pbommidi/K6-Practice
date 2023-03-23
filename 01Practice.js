@@ -35,7 +35,7 @@ export function scenario_1() {
       },
     }
   )
-  console.log(response),
+
 
   // Automatically added sleep
   sleep(1)
