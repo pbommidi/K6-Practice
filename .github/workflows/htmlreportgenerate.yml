@@ -1,7 +1,12 @@
-name: K6HtmlReporting
-on: workflow_dispatch
+name: K6 Load Test
+
+on:
+  push:
+    branches:
+      - main
+
 jobs:
-  k6_test:
+  k6:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -12,9 +17,9 @@ jobs:
           echo "deb https://dl.bintray.com/loadimpact/deb stable main" | sudo tee -a /etc/apt/sources.list
           sudo apt-get update -y
           sudo apt-get install -y k6
-      - name: Run k6 test and generate HTML report
+      - name: Run k6 tests and generate HTML reports
         run: |
-          k6 run --out html=./report.html script.js
+          k6 run --out html=./report.html getdogid.js
       - name: Archive HTML report
         uses: actions/upload-artifact@v2
         with:
