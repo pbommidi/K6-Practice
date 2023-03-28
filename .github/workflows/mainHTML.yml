@@ -14,12 +14,12 @@ jobs:
       uses: grafana/k6-action@v0.2.0
       with:
         filename: getdogid.js
-        flags: --out json=summary.json    
-    - name: Upload performance test results
-      uses: actions/upload-artifact@v1
-      with:
-       name: k6-summary-report-json
-       path: summary.json
+       ## flags: --out json=summary.json    
+ ##   - name: Upload performance test results
+ ##     uses: actions/upload-artifact@v1
+  ##    with:
+  ##     name: k6-summary-report-json
+     ##  path: summary.json 
     - name: Upload HTML report
       uses: actions/upload-artifact@v1
       with:
