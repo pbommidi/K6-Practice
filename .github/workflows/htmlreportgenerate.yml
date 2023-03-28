@@ -1,0 +1,22 @@
+name: K6HtmlReporting
+on: workflow_dispatch
+jobs:
+  k6_test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Install k6
+        run: |
+          sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 379CE192D401AB61
+          echo "deb https://dl.bintray.com/loadimpact/deb stable main" | sudo tee -a /etc/apt/sources.list
+          sudo apt-get update -y
+          sudo apt-get install -y k6
+      - name: Run k6 test and generate HTML report
+        run: |
+          k6 run --out html=./report.html script.js
+      - name: Archive HTML report
+        uses: actions/upload-artifact@v2
+        with:
+          name: k6-html-report
+          path: ./report.html
