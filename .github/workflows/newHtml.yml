@@ -1,0 +1,33 @@
+name: K6 Load Test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  k6:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+      
+    - name: Install k6
+      run: |
+        sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 379CE192D401AB61
+        echo "deb https://dl.bintray.com/loadimpact/deb stable main" | sudo tee -a /etc/apt/sources.list
+        sudo apt-get update
+        sudo apt-get install k6
+
+    - name: Run local k6 test
+      uses: grafana/k6-action@v0.2.0
+      with:
+        filename: getdogid.js
+        flags: --out json=summary.json
+
+    - name: Generate HTML report
+      run: k6 convert -o summary.html summary.json
+      
+    - name: Upload performance test results
+      uses: actions/upload-artifact@v1
+      with:
+        name: k6-summary-report-html
+        path: summary.html
