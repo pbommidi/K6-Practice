@@ -25,4 +25,3 @@ jobs:
       with:
        name: k6-summary-report-html
        path: summary.html
-       depends-on: k6
