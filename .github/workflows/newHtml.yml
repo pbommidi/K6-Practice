@@ -5,7 +5,7 @@ on:
 
 jobs:
   k6:
-    runs-on: [self-hosted, linux, ARM64]
+    runs-on: windows-latest
     steps:
     - name: Checkout
       uses: actions/checkout@v1
