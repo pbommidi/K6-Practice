@@ -14,6 +14,7 @@ jobs:
       run: Invoke-WebRequest https://dl.bintray.com/loadimpact/windows/k6-v0.35.1-amd64.msi -OutFile k6.msi
     - name: Install k6
       run: msiexec /i k6.msi /quiet
+      
     - name: Run local k6 test
       uses: grafana/k6-action@v0.2.0
       with:
