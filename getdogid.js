@@ -22,7 +22,7 @@ export function scenario_1() {
       Accept: 'application/json',
     },
   })
-
+console.log(`The summary report can be found at: ${__ENV.K6_SUMMARY_OUTPUT}`);
   // Automatically added sleep
   sleep(5)
 }
