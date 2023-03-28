@@ -20,13 +20,9 @@ jobs:
       with:
        name: k6-summary-report-json
        path: summary.json
-    - name: Upload performance test results html
+    - name: Archive HTML report
       uses: actions/upload-artifact@v1
       with:
        name: k6-summary-report-html
        path: summary.html
-    - name: Upload performance test results
-      uses: actions/upload-artifact@v1
-      with:
-        name: k6-summary-report-text
-        path: stdout.txt
+       depends-on: k6
