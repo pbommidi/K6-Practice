@@ -1,5 +1,6 @@
 import { sleep } from 'k6'
 import http from 'k6/http'
+import { htmlReport } from "https://raw.githubusercontent.com/benc-uk/k6-reporter/main/dist/bundle.js";
 
 export const options = {
   scenarios: {
@@ -13,6 +14,11 @@ export const options = {
   },
 }
 
+export function handleSummary(data) {
+  return {
+    "summary.html": htmlReport(data),
+  };
+}
 export function scenario_1() {
   let response
 
@@ -22,7 +28,6 @@ export function scenario_1() {
       Accept: 'application/json',
     },
   })
-console.log(`The summary report can be found at: ${__ENV.K6_SUMMARY_OUTPUT}`);
   // Automatically added sleep
   sleep(5)
 }
