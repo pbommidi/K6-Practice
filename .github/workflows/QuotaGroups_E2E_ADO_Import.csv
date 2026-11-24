@@ -1,0 +1,38 @@
+﻿ID,Work Item Type,Title,Test Step,Step Action,Step Expected,Area Path,Assigned To,State,Priority
+,Test Case,Quota E2E-01 [Automated] Get subscription quota (both regions),,,,Azure-Platform,,Design,1
+,,,1,"Trigger 'Get subscription quota' for the test subscription, a known SKU and westeurope; wait for completion",Run status = Succeeded,,,,
+,,,2,Read the pipeline log,Log shows the quota limit for that subscription and SKU; no error lines,,,,
+,,,3,Repeat for northeurope,Same result for the second region,,,,
+,Test Case,Quota E2E-02 [Automated] Get subscription quota with an unknown SKU,,,,Azure-Platform,,Design,2
+,,,1,Trigger 'Get subscription quota' with an SKU that doesn't exist; wait for completion,Run completes or fails cleanly (no hang),,,,
+,,,2,Read the pipeline log,Clear message or error naming the unknown SKU,,,,
+,Test Case,Quota E2E-03 [Automated] Retrieve SKU quotas (both regions),,,,Azure-Platform,,Design,1
+,,,1,Trigger 'Retrieve SKU quotas' for the test subscription and westeurope; wait for completion,Run status = Succeeded,,,,
+,,,2,Read the pipeline log,"A non-empty list of SKUs, each with its display name; no error lines",,,,
+,,,3,Repeat for northeurope,Same result for the second region,,,,
+,Test Case,Quota E2E-04 [Automated] Request quota with WhatIf - small amount (10),,,,Azure-Platform,,Design,1
+,,,1,"Run 'Get subscription quota' for the recipient, SKU and region; store the value",Baseline stored,,,,
+,,,2,Trigger 'Request quota' with WhatIf = true and amount = 10; wait for completion,Run status = Succeeded,,,,
+,,,3,Read the pipeline log,Plan table present; planned total covers 10; each donor amount is a multiple of 10,,,,
+,,,4,Read the recipient's quota again,Value equals the baseline: nothing changed,,,,
+,Test Case,Quota E2E-05 [Automated] Request quota with WhatIf - larger amount (100) spreads across donors,,,,Azure-Platform,,Design,1
+,,,1,Store the recipient's baseline quota,Baseline stored,,,,
+,,,2,Trigger 'Request quota' with WhatIf = true and amount = 100; wait for completion,Run status = Succeeded,,,,
+,,,3,Read the plan table in the log,Quota taken 10 at a time from several donors; no single donor gives much more than the others,,,,
+,,,4,Read the recipient's quota again,Value equals the baseline,,,,
+,Test Case,Quota E2E-06 [Automated] Request quota with WhatIf - amount not a multiple of 10 (25),,,,Azure-Platform,,Design,2
+,,,1,Trigger 'Request quota' with WhatIf = true and amount = 25; wait for completion,Request accepted; run status = Succeeded,,,,
+,,,2,Read the plan table in the log,Planned total matches the expected value (25 or rounded up to 30),,,,
+,Test Case,Quota E2E-07 [Automated] Donors have no compute in North or West Europe,,,,Azure-Platform,,Design,1
+,,,1,Take the donor subscription IDs from the E2E-05 plan table,Donor list extracted,,,,
+,,,2,"For each donor, query Resource Graph for compute (VMs, VM scale sets, App Service plans and similar) in northeurope and westeurope",Query runs without errors,,,,
+,,,3,Check the results,No donor has compute in either region,,,,
+,Test Case,Quota E2E-08 [Automated] Recipient is never a donor,,,,Azure-Platform,,Design,1
+,,,1,Read the donor list in the E2E-05 plan table,Donor list extracted,,,,
+,,,2,Look for the recipient subscription ID in the donor list,The recipient is not in the donor list,,,,
+,Test Case,Quota E2E-10 [Automated] Zero or negative amount is rejected,,,,Azure-Platform,,Design,2
+,,,1,Trigger 'Request quota' with WhatIf = true and amount = 0,Rejected with a clear error before any plan,,,,
+,,,2,Trigger 'Request quota' with WhatIf = true and amount = -10,Rejected with a clear error before any plan,,,,
+,Test Case,Quota E2E-11 [Automated] No errors hidden in successful runs,,,,Azure-Platform,,Design,1
+,,,1,"After each run, scan its log for error, forbidden and permission messages",Scan completes,,,,
+,,,2,Check the scan result,"No error lines, even when the run status is Succeeded; the test fails otherwise",,,,
